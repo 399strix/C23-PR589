@@ -10,16 +10,29 @@ LABEL_BUATAN = {0: 'Bendungan', 1: 'Kebun Binatang', 2: 'Kolam Renang', 3: 'Muse
 PATH_MODEL_ALAM = "C:/Users/Administrator/Desktop/C23-PR589/ML/Model/ResNet50V2_20_A_Batch16_RMS_10-3_Train76_Val80.h5"
 PATH_MODEL_BUATAN = "C:/Users/Administrator/Desktop/C23-PR589/ML/Model/ResNet50V2_20_N_Batch16_RMS_10-3_Train78_Val72.h5"
 PORT = 5000
+SECRET_KEY = "secret"
 
 app = Flask(__name__)
 
+# Decorator for checking API Key
+def checkAPIKey(view):
+    @wraps(view)
+    def isAPIKeyValid(*args, **kwargs):
+        if request.headers.get('apiKey') and request.headers.get('apiKey') == SECRET_KEY:
+            return view(*args, **kwargs)
+        else:
+            abort(401)
+    return isAPIKeyValid
+
 # Route for Natural Tourism Prediction
 @app.route('/alam')
+@checkAPIKey
 def predictAlam():
     return "This is alam"
 
 # Route for Artificial Tourism Prediction
 @app.route('/buatan')
+@checkAPIKey
 def predictBuatan():
     return "This is buatan"
 
