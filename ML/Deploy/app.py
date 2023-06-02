@@ -1,5 +1,6 @@
 from flask import Flask, request, abort, jsonify
 from functools import wraps
+from model import *
 
 # DO NOT CHANGE THIS VARIABLE
 LABEL_ALAM = {0: 'Air Terjun', 1: 'Campsite', 2: 'Danau', 3: 'Gunung', 4: 'Hutan', 5: 'Kebun', 6: 'Pantai', 7: 'Sungai'}
@@ -22,5 +23,10 @@ def predictAlam():
 def predictBuatan():
     return "This is buatan"
 
+def init():
+    global MODEL_ALAM, MODEL_BUATAN
+    MODEL_ALAM, MODEL_BUATAN = load_model(PATH_MODEL_ALAM, PATH_MODEL_BUATAN)
+
 if __name__ == '__main__':
+    init()
     app.run(debug=True, port=PORT)
