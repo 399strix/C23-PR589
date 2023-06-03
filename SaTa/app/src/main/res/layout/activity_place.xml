@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.fragment.QuestionFragment"
+    tools:context=".ui.filter.PlaceActivity"
     android:padding="16dp"
     android:background="@color/white">
 
@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
 
-        android:text="@string/home_desc"
+        android:text="@string/where_desc"
         android:textSize="24sp"
         android:textStyle="bold"
         android:textAlignment="center"

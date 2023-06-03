@@ -3,7 +3,6 @@ package com.capstone.sata.data.model
 data class DataFilter(
     val imgUrl : String,
     val tvDesc : String,
-
 )
 
 data class DataQuestion(
@@ -15,5 +14,10 @@ data class DataQuestion(
 
 data class Answer(
     val answer: String,
-    val imgUrl: String,
+)
+
+data class DataPreferences(
+    var jenisWisata : Boolean? = null,
+    var budget : Int? = null,
+    var daerah : String? = null
 )

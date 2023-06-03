@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="120dp"
 
-        android:text="@string/home_desc"
+        android:text="@string/budget_desc"
         android:textSize="24sp"
         android:textStyle="bold"
         android:textAlignment="center"

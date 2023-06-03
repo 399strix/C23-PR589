@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -12,10 +14,13 @@
         android:theme="@style/Theme.SaTa"
         tools:targetApi="31">
         <activity
-            android:name=".ui.filter.FilterActivity"
+            android:name=".ui.filter.PlaceActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.home.HomeActivity"
+            android:name=".ui.cam.CameraActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.filter.BudgetActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

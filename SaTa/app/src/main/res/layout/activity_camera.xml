@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.cam.CameraActivity">
+
+    <ImageView
+        android:id="@+id/iv_insert"
+        android:layout_width="256dp"
+        android:layout_height="256dp"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="40dp"
+
+        android:src="@drawable/ic_insertimage"
+        />
+
+    <TextView
+        android:id="@+id/tv_insert"
+        android:layout_width="256dp"
+        android:layout_height="wrap_content"
+
+        android:text="Masukkan foto yang menjadi tempat acuan liburan anda! "
+
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:backgroundTint="@color/black"
+
+        app:layout_constraintEnd_toEndOf="@+id/iv_insert"
+        app:layout_constraintStart_toStartOf="@+id/iv_insert"
+        app:layout_constraintTop_toBottomOf="@+id/iv_insert"
+        android:layout_marginTop="18dp"/>
+
+    <Button
+        android:id="@+id/btn_next"
+        android:layout_width="256dp"
+        android:layout_height="wrap_content"
+
+        android:text="Lanjut"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_insert"
+        android:layout_marginTop="18dp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
