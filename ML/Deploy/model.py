@@ -1,6 +1,8 @@
+from PIL import Image
 import tensorflow as tf
-import base64
 import numpy as np
+# import base64
+# import io
 
 def load_model(path_artificial, path_natural):
     model_A = tf.keras.models.load_model(path_artificial)
@@ -8,11 +10,8 @@ def load_model(path_artificial, path_natural):
 
     return model_A, model_N
 
-def convert(imgBase64):
-    image = imgBase64.split(",")[1]
-    image = base64.b64decode(image)
-    image = tf.io.decode_image(image, channels=3, dtype=tf.float32)
-
+def convert(raw):
+    image = np.array(Image.open(raw))
     return image
 
 def preprocess(image):
@@ -24,7 +23,14 @@ def preprocess(image):
     image_arr = image.numpy()
     final_image = datagen.apply_transform(image_arr, {'theta': 0})
     final_image = np.expand_dims(final_image, axis=0)
-    return final_image
+
+    # pil_image = Image.fromarray(np.uint8(final_image[0]))
+    # image_bytes = io.BytesIO()
+    # pil_image.save(image_bytes, format='JPEG')
+    # image_bytes = image_bytes.getvalue()
+    # image_base64 = base64.b64encode(image_bytes).decode('utf-8')
+
+    return final_image#, image_base64
 
 def predict(model, image, label):
     predictions = model.predict(image)
