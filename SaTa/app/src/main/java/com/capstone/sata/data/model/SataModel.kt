@@ -5,3 +5,15 @@ data class DataFilter(
     val tvDesc : String,
 
 )
+
+data class DataQuestion(
+    val dataQuestion : DataQuestion?,
+    val answer: List<Answer>,
+    val isAvail : Boolean,
+    val questionTitle: String
+)
+
+data class Answer(
+    val answer: String,
+    val imgUrl: String,
+)
