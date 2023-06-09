@@ -15,7 +15,6 @@ def convert(raw):
 def preprocess(image):
     datagen = tf.keras.preprocessing.image.ImageDataGenerator(
         rescale=1./255,
-        fill_mode='nearest'
     )
     image = tf.image.resize(image, (250, 250))
     image_arr = image.numpy()
@@ -28,14 +27,14 @@ def predict(model, image, label):
     pred_label = []
     pred_confidence = []
     for pred in predictions:
-        label_indices = np.where(pred >= 0.3)[0]
+        label_indices = np.where(pred > 0.5)[0]
         pred_label.append([label[i] for i in label_indices])
         pred_confidence.append([float(pred[i]) for i in label_indices])
-
+    
     predictions = {}
     if len(pred_label[0]) != 0:
-        for a, b in zip(pred_label, pred_confidence):
-            predictions[a[0]] = b[0]
+        for a, b in zip(pred_label[0], pred_confidence[0]):
+            predictions[a] = b
     else:
         predictions = None
 

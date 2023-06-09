@@ -1,6 +1,7 @@
 from flask import Flask, request, abort, jsonify
 from functools import wraps
 from model import *
+from recommender import *
 import io
 
 # V1 - DO NOT CHANGE THIS VARIABLE
@@ -32,11 +33,6 @@ def checkAPIKey(view):
 @app.route('/alam', methods=['POST'])
 @checkAPIKey
 def predictAlam():
-    # priceFilter should be in numerical format, ex: 0=gratis, 1=under 5k, etc.
-    priceFilter = request.form.get('price')
-    # locationFilter should be in string format, ex: "Kota Surabaya", "Kab. Malang", etc.
-    locationFilter = request.form.get('location')
-
     # Fetch image from request
     buffer = io.BytesIO()
     request.files['image'].save(buffer)
@@ -48,23 +44,18 @@ def predictAlam():
     # Predict image
     predictions, pred_label = predict(MODEL_ALAM, image, LABEL_ALAM)
 
-    # Get recommended places
+    # Get all available places based on prediction label
     if predictions:
-        listPlace = recommendPlaces(pred_label, priceFilter, locationFilter)
+        listCity, listPrice = getFilterBasedOnLabel(pred_label)
     else:
-        return jsonify({'status': 'OK', 'message': 'No prediction found'})
+        return jsonify({'code': 'A-NF', 'message': 'No prediction found'})
     
-    return jsonify({'status': 'OK', 'message': 'Success', 'predictions': predictions, 'recommendedPlaces': listPlace})
+    return jsonify({'status': 'A-OK', 'message': 'Success', 'predictions': predictions, 'city': listCity, 'price': listPrice})
 
 # Route for Artificial Tourism Prediction
 @app.route('/buatan', methods=['POST'])
 @checkAPIKey
 def predictBuatan():
-    # priceFilter should be in numerical format, ex: 0=gratis, 1=under 5k, etc.
-    priceFilter = request.form.get('price')
-    # locationFilter should be in string format, ex: "Kota Surabaya", "Kab. Malang", etc.
-    locationFilter = request.form.get('location')
-
     # Fetch image from request
     buffer = io.BytesIO()
     request.files['image'].save(buffer)
@@ -78,22 +69,47 @@ def predictBuatan():
 
     # Get recommended places
     if predictions:
-        listPlace = recommendPlaces(pred_label, priceFilter, locationFilter)
+        listCity, listPrice = getFilterBasedOnLabel(pred_label)
     else:
-        return jsonify({'status': 'OK', 'message': 'No prediction found'})
+        return jsonify({'status': 'B-NF', 'message': 'No prediction found'})
     
-    return jsonify({'status': 'OK', 'message': 'Success', 'predictions': predictions, 'recommendedPlaces': listPlace})
+    return jsonify({'status': 'A-OK', 'message': 'Success', 'predictions': predictions, 'city': listCity, 'price': listPrice})
 
-def recommendPlaces(label, priceFilter, locationFilter):
-    print(label, priceFilter, locationFilter)
-    # TODO : Get recommended places based on prediction label, priceFilter and locationFilter.
-    #        For now, just use SQL query to get all places from prediction label, and filtered 
-    #        by priceFilter and locationFilter. Then, return the recommended places in JSON format
-    return ["Place 1", "Place 2", "Place 3"]
+# Route for Filtering
+@app.route('/filter', methods=['POST'])
+@checkAPIKey
+def filterOutput():
+    # priceFilter should be in numerical format, ex: 0=gratis, 1=under 5k, etc.
+    priceFilter = request.form.get('price')
+    # locationFilter should be in string format, ex: "Kota Surabaya", "Kab. Malang", etc.
+    locationFilter = request.form.get('location')
+    # labelFilter should be in string format, ex: "Air Terjun", "Campsite", etc.
+    labelFilter = request.form.get('prediction')
 
+    # TODO : Get all available places based on priceFilter, locationFilter, and labelFilter
+    # allPlaces = fetch all places by label from db
+    # filteredPlaces = filter allPlaces by priceFilter and locationFilter
+    # if len(filteredPlaces) == 0:
+    # Do recomendation from one random name in allPlaces
+    recommendations = contentBasedFiltering('Kawah Ijen', locationFilter, DATA_TOURISM, SIMILARITY)
+
+    return jsonify({'status': 'F-OK', 'message': 'Success', 'recommendations': recommendations})
+
+def getFilterBasedOnLabel(label):
+    print(label)
+    # TODO : Get all distict available places based on prediction label
+    #        Get all price based on prediction label
+    return ['Kota Surabaya', 'Kab. Malang', 'Kab. Sidoarjo', 'Kab. Probolinggo'], [10000, 20000, 30000, 40000]
+
+import pandas as pd
 def init():
-    global MODEL_ALAM, MODEL_BUATAN
+    global MODEL_ALAM, MODEL_BUATAN, DATA_TOURISM, SIMILARITY
     MODEL_ALAM, MODEL_BUATAN = load_model(PATH_MODEL_ALAM, PATH_MODEL_BUATAN)
+    # Data Tourism fetch from db and ensure is in Pandas DataFrame format, 
+    # Column : 'No', 'Wisata', 'Label (int)', 'Label (str)', 'Alamat', 'Harga', 'Image URL', 'Kab/Kota', 'Provinsi', 'Deskripsi'
+    # Used : 'Wisata', 'Label (str)', 'Kab/Kota', 'Provinsi', 'Deskripsi'
+    DATA_TOURISM = pd.read_csv('C:/Users/Administrator/Desktop/C23-PR589/ML/Data/dataset.csv')
+    DATA_TOURISM, SIMILARITY = initRecommender(DATA_TOURISM)
 
 if __name__ == '__main__':
     init()
