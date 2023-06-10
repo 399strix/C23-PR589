@@ -1,0 +1,17 @@
+steps:
+# Build the container image
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/clear-tooling-385912/SaTa', '.']
+# Push the container image to Container Registry
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/clear-tooling-385912/SaTa']
+# Run Prisma migration deploy command
+- name: 'gcr.io/clear-tooling-385912/SaTa'
+  entrypoint: 'npx'
+  args: ['prisma', 'migrate', 'deploy']
+# Deploy container image to Cloud Run
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: gcloud
+  args: ['run', 'deploy', 'Capstone', '--image', 'gcr.io/clear-tooling-385912/SaTa', '--region', 'us-central1', '--platform', 'managed']
+images:
+- gcr.io/clear-tooling-385912/SaTa
