@@ -1,25 +1,25 @@
 steps:
 # Build the container image
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'gcr.io/$PROJECT_ID/demo-app:$COMMIT_SHA', '.']
+  args: ['build', '-t', 'gcr.io/$PROJECT_ID/$_SERVICE_NAME:$COMMIT_SHA', '.']
 # Push the container image to Container Registry
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'gcr.io/$PROJECT_ID/demo-app:$COMMIT_SHA']
+  args: ['push', 'gcr.io/$PROJECT_ID/$_SERVICE_NAME:$COMMIT_SHA']
 # Run Prisma migration reset command
-- name: 'gcr.io/$PROJECT_ID/demo-app:$COMMIT_SHA'
+- name: 'gcr.io/$PROJECT_ID/$_SERVICE_NAME:$COMMIT_SHA'
   entrypoint: 'npx'
   args: ['prisma', 'migrate', 'reset', '--force']
 # Run Prisma migration deploy command
-- name: 'gcr.io/$PROJECT_ID/demo-app:$COMMIT_SHA'
+- name: 'gcr.io/$PROJECT_ID/$_SERVICE_NAME:$COMMIT_SHA'
   entrypoint: 'npx'
   args: ['prisma', 'migrate', 'deploy']
 # Generate Prisma client
-- name: 'gcr.io/$PROJECT_ID/demo-app:$COMMIT_SHA'
+- name: 'gcr.io/$PROJECT_ID/$_SERVICE_NAME:$COMMIT_SHA'
   entrypoint: 'npx'
   args: ['prisma', 'generate']
 # Deploy container image to Cloud Run
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: gcloud
-  args: ['run', 'deploy', 'Capstone', '--image', 'gcr.io/$PROJECT_ID/demo-app:$COMMIT_SHA', '--region', 'us-central1', '--platform', 'managed']
+  args: ['run', 'deploy', 'Capstone', '--image', 'gcr.io/$PROJECT_ID/$_SERVICE_NAME:$COMMIT_SHA', '--region', 'us-central1', '--platform', 'managed']
 images:
-- 'gcr.io/$PROJECT_ID/demo-app:$COMMIT_SHA'
+- 'gcr.io/$PROJECT_ID/$_SERVICE_NAME:$COMMIT_SHA'
