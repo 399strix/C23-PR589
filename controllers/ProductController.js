@@ -103,7 +103,6 @@ export const createProduct = async (req, res) =>{
                 location: location,
                 image: image,
                 label: label,
-                rating: rating
             }
         });
         res.status(201).json(product);
@@ -127,7 +126,6 @@ export const updateProduct = async (req, res) =>{
                 location: location,
                 image: image,
                 label: label,
-                rating: rating
             }
         });
         res.status(200).json(product);

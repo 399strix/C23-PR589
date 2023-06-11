@@ -17,7 +17,6 @@ model Product {
   description String?
   location String
   image String
-  rating Boolean @default(false)
   label Int 
   price Int
 }
