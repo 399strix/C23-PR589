@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 
 
 const app = express();
-const port = process.env.NODE_ENV || 'development';
+const port = process.env.NODE_ENV || 8080;
 
 if (port === 'production') {
     dotenv.config({ path: `.env.${port}` });
