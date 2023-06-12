@@ -5,10 +5,10 @@ import dotenv from 'dotenv';
 
 
 const app = express();
-const env = process.env.NODE_ENV || 'development';
+const port = process.env.NODE_ENV || 'development';
 
-if (env === 'production') {
-    dotenv.config({ path: `.env.${env}` });
+if (port === 'production') {
+    dotenv.config({ path: `.env.${port}` });
 } else {
     dotenv.config({ path: '.env' });
 }
@@ -17,6 +17,6 @@ app.use(cors());
 app.use(express.json());
 app.use(ProductRoute);
 
-app.listen(env, () => {
-    console.log(`Listening: http://localhost:${env}`);
+app.listen(port, () => {
+    console.log(`Listening: http://localhost:${port}`);
 });
