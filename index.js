@@ -5,7 +5,7 @@ import { config } from 'dotenv';
 config();
 
 const app = express();
-const port = process.env.NODE_ENV || 'development';
+const port = process.env.PORT || 8080;
 
 app.get("/api",(req, res)=>{
     res.json({
