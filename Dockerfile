@@ -15,7 +15,7 @@ COPY . .
 RUN npm install
 
 # Set NODE_ENV environment variable
-ENV DATABASE_URL="mysql://root:tiketdb123@35.238.125.132/tiketdb?unix_socket=/cloudsql/ecstatic-armor-387013:us-central1:sata-tiketdb"
+ENV DATABASE_URL="mysql://root:tiketdb123@34.123.66.68/satadb?unix_socket=/cloudsql/ecstatic-armor-387013:us-central1:sql-satadb"
 ENV NODE_ENV production
 
 # Build production image
