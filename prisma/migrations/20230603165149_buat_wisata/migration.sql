@@ -5,7 +5,7 @@
 
 */
 -- AlterTable
-ALTER TABLE `product` ADD COLUMN `description` VARCHAR(191) NULL,
+ALTER TABLE `Product` ADD COLUMN `description` VARCHAR(191) NULL,
     ADD COLUMN `lokasi` VARCHAR(191) NOT NULL,
     ADD COLUMN `rating` BOOLEAN NOT NULL DEFAULT false,
     MODIFY `name` VARCHAR(191) NULL;
