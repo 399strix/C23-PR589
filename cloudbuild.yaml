@@ -20,6 +20,6 @@ steps:
 # Deploy container image to Cloud Run
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: gcloud
-  args: ['run', 'deploy', 'Capstone', '--image', 'gcr.io/$PROJECT_ID/$_SERVICE_NAME:$COMMIT_SHA', '--region', 'us-central1', '--platform', 'managed']
+  args: ['run', 'deploy', 'capstone', '--image', 'gcr.io/$PROJECT_ID/$_SERVICE_NAME:$COMMIT_SHA', '--region', 'us-central1', '--platform', 'managed']
 images:
 - 'gcr.io/$PROJECT_ID/$_SERVICE_NAME:$COMMIT_SHA'
