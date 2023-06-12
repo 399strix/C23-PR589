@@ -5,14 +5,14 @@ import { config } from 'dotenv';
 config();
 
 const app = express();
+const env = process.env.NODE_ENV || 'development';
 const port = process.env.PORT || 8080;
 
-app.get("/api",(req, res)=>{
-    res.json({
-        success:1,
-        message:"This is Nice One!"
-    });
-});
+if (env === 'production') {
+    dotenv.config({ path: `.env.${env}` });
+} else {
+    dotenv.config({ path: '.env' });
+}
 
 app.use(cors());
 app.use(express.json());
