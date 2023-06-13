@@ -19,5 +19,5 @@ app.use(express.json());
 app.use(ProductRoute);
 
 app.listen(port, () => {
-    console.log(`Listening: http://localhost:${port}`);
+    console.log(`Listening: ${port}`);
 });
