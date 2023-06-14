@@ -13,8 +13,8 @@ LABEL_BUATAN = {0: 'Bendungan', 1: 'Kebun Binatang', 2: 'Kolam Renang', 3: 'Muse
 # END OF V1
 
 # V2 - CHANGE THIS INSTEAD
-PATH_MODEL_BUATAN = "./ML/Model/ResNet50V2_20_A_Batch16_RMS_10-3_Train76_Val80.h5"
-PATH_MODEL_ALAM = "./ML/Model/ResNet50V2_20_N_Batch16_RMS_10-3_Train78_Val72.h5"
+PATH_MODEL_BUATAN = "../Model/ResNet50V2_20_A_Batch16_RMS_10-3_Train76_Val80.h5"
+PATH_MODEL_ALAM = "../Model/ResNet50V2_20_N_Batch16_RMS_10-3_Train78_Val72.h5"
 PORT = 8080
 DB_URL = "https://c23-pr589-ru5cfkck3a-uc.a.run.app/"
 # USED FOR API KEY, ENSURE THIS SAME WITH IN ANDROID APP
