@@ -16,6 +16,7 @@ COPY model.py /app/model.py
 COPY recommender.py /app/recommender.py
 COPY requirements.txt /app/requirements.txt
 
+COPY . .
 # Install production dependencies.
 RUN pip install --no-cache-dir -r requirements.txt
 
@@ -28,4 +29,4 @@ ENV PORT 8000
 EXPOSE 8000
 
 # Run the application
-CMD exec gunicorn --bind :$PORT --workers 2 --threads 8 --timeout 0 app:app
+CMD ["python", "app.py"]
