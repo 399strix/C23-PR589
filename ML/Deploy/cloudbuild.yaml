@@ -6,20 +6,22 @@ steps:
   # Push the container image to Container Registry
   - name: "gcr.io/cloud-builders/docker"
     args: ["push", "gcr.io/$PROJECT_ID/myimage:$COMMIT_SHA"]
-  # Deploy container image to Cloud Run
+  # deploy container image to Cloud Run
   - name: "gcr.io/cloud-builders/gcloud"
     args:
-      [
-        "run",
-        "deploy",
-        "myimage",
-        "--image",
-        "gcr.io/$PROJECT_ID/myimage",
-        "--region",
-        "us-central1",
-        "--platform",
-        "managed",
-        "--allow-unauthenticated",
-      ]
+      - "run"
+      - "deploy"
+      - "appml"
+      - "--image"
+      - "gcr.io/$PROJECT_ID/myimage:$COMMIT_SHA"
+      - "--region"
+      - "us-central1"
+      - "--platform"
+      - "managed"
+      - "--allow-unauthenticated"
+      - "--memory"
+      - "8Gi"
+      - "--port"
+      - "8000"
 images:
   - "gcr.io/$PROJECT_ID/myimage:$COMMIT_SHA"
