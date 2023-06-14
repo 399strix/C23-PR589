@@ -91,25 +91,37 @@ export const getLocationByLabel = async (req, res) =>{
     }
 }
 
-export const createProduct = async (req, res) =>{
-    const {name, price, image, email, description, location, rating, label} = req.body;
+export const createProduct = async (req, res) => {
+    const products = req.body; // Array of objects containing multiple sets of data
+  
     try {
-        const product = await prisma.product.create({
-            data:{
-                name: name,
-                price: price,
-                email: email,
-                description: description,
-                location: location,
-                image: image,
-                label: label,
-            }
-        });
-        res.status(201).json(product);
+      const createdProducts = await Promise.all(
+        products.map(async (product) => {
+          const { name, price, image, email, description, location, rating, label } = product;
+  
+          // Create the product
+          const createdProduct = await prisma.product.create({
+            data: {
+              name: name,
+              price: price,
+              email: email,
+              description: description,
+              location: location,
+              image: image,
+              label: label,
+            },
+          });
+  
+          return createdProduct;
+        })
+      );
+  
+      res.status(201).json(createdProducts);
     } catch (error) {
-        res.status(400).json({msg: error.message});
+      res.status(400).json({ msg: error.message });
     }
-}
+};
+
 
 export const updateProduct = async (req, res) =>{
     const {name, price, image, description, location, email, rating, label} = req.body;
