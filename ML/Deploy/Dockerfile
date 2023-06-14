@@ -11,10 +11,10 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /app
 
 # Copy the application code
-COPY app.py /app/app.py
-COPY model.py /app/model.py
-COPY recommender.py /app/recommender.py
-COPY requirements.txt /app/requirements.txt
+COPY ML/Deploy/app.py /app/app.py
+COPY ML/Deploy/model.py /app/model.py
+COPY ML/Deploy/recommender.py /app/recommender.py
+COPY ML/Deploy/requirements.txt /app/requirements.txt
 
 # Set environment variables
 ENV PYTHONUNBUFFERED True
