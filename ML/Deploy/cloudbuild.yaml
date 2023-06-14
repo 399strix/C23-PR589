@@ -1,11 +1,11 @@
 steps:
   # Build the Container image
   - name: "gcr.io/cloud-builders/docker"
-    args: ["build", "-t", "gcr.io/$PROJECT_ID/myimage", "."]
+    args: ["build", "-t", "gcr.io/$PROJECT_ID/c23-pr589", "."]
     dir: "ML/Deploy"
   # Push the container image to Container Registry
   - name: "gcr.io/cloud-builders/docker"
-    args: ["push", "gcr.io/$PROJECT_ID/myimage"]
+    args: ["push", "gcr.io/$PROJECT_ID/c23-pr589"]
   # Deploy container image to Cloud Run
   - name: "gcr.io/cloud-builders/gcloud"
     args:
@@ -14,7 +14,7 @@ steps:
         "deploy",
         "c23-pr589",
         "--image",
-        "gcr.io/$PROJECT_ID/myimage",
+        "gcr.io/$PROJECT_ID/c23-pr589",
         "--region",
         "us-central1",
         "--platform",
@@ -22,4 +22,4 @@ steps:
         "--allow-unauthenticated",
       ]
 images:
-  - "gcr.io/$PROJECT_ID/myimage"
+  - "gcr.io/$PROJECT_ID/c23-pr589"
