@@ -11,10 +11,7 @@ RUN npm install
 
 COPY . .
 
-# Build production image
-# FROM dependencies as builder
-# RUN npm run build
 EXPOSE 8080
 
 # start command
-CMD ["npm", "run", "start:prod"]
+CMD ["node", "index.js"]
