@@ -12,8 +12,8 @@ LABEL_BUATAN = {0: 'Bendungan', 1: 'Kebun Binatang', 2: 'Kolam Renang', 3: 'Muse
 # END OF V1
 
 # V2 - CHANGE THIS INSTEAD
-PATH_MODEL_BUATAN = "C23-PR589/ML/Model/ResNet50V2_20_A_Batch16_RMS_10-3_Train76_Val80.h5"
-PATH_MODEL_ALAM = "C23-PR589/ML/Model/ResNet50V2_20_N_Batch16_RMS_10-3_Train78_Val72.h5"
+PATH_MODEL_BUATAN = "ML/Model/ResNet50V2_20_A_Batch16_RMS_10-3_Train76_Val80.h5"
+PATH_MODEL_ALAM = "ML/Model/ResNet50V2_20_N_Batch16_RMS_10-3_Train78_Val72.h5"
 PORT = 8000
 DB_URL = "https://c23-pr589-ru5cfkck3a-uc.a.run.app/"
 # USED FOR API KEY, ENSURE THIS SAME WITH IN ANDROID APP
@@ -169,4 +169,4 @@ def init():
 
 if __name__ == '__main__':
     init()
-    app.run(debug=True, port=PORT)
+    app.run( debug=True, host='0.0.0.0', port=int(os.environ.get('PORT', 8000)) )
