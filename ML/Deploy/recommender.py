@@ -3,6 +3,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 import pandas as pd
 
 def preprocessing(data):
+    data = str(data)
     data = data.lower()
     return data
 
@@ -10,7 +11,7 @@ def initRecommender(data_tourism):
     tv = TfidfVectorizer(max_features=5000)
     
     data_tourism['Deskripsi'] = data_tourism['Deskripsi'] + ' ' + data_tourism['Label (str)']
-    data_tourism.drop(['No', 'Label (int)', 'Label (str)', 'Alamat'], axis=1, inplace=True)
+    data_tourism.drop(['email', 'Label (int)', 'Label (str)'], axis=1, inplace=True)
     data_tourism.Deskripsi = data_tourism.Deskripsi.apply(preprocessing)
 
     vecs = tv.fit_transform(data_tourism.Deskripsi).toarray()
