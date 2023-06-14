@@ -1,18 +1,31 @@
-# Use the official lightweight Python image.
-# https://hub.docker.com/_/python
-FROM python:3.10
+# Base image
+FROM python:3.10-slim
 
-# Allow statements and log messages to immediately appear in the Knative logs
+# Install dependencies
+RUN apt-get update && apt-get install -y \
+    curl \
+    build-essential \
+    unzip
+
+# Set working directory
+WORKDIR /app
+
+# Copy the requirements file
+COPY requirements.txt ./
+
+# Install Python dependencies
+RUN pip install --upgrade pip && pip install -r requirements.txt
+
+# Copy the application code
+COPY . .
+
+# Set environment variables
 ENV PYTHONUNBUFFERED True
+ENV HOST 0.0.0.0
+ENV PORT 8000
 
-# Copy local code to the container image.
-ENV APP_HOME /app
-WORKDIR $APP_HOME
-COPY . ./
+# Expose the specified port
+EXPOSE 8000
 
-# Install production dependencies.
-RUN pip install -r requirements.txt
-
-ENV FLASK_APP=app.py
-
-CMD ["python3", "-m", "flask", "run", "--host=0.0.0.0"]
+# Run the application
+CMD exec gunicorn --bind :$PORT --workers 2 --threads 8 --timeout 0 app:app
