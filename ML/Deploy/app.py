@@ -3,6 +3,8 @@ from functools import wraps
 from model import *
 from recommender import *
 import io
+import requests as req
+import pandas as pd
 
 # V1 - DO NOT CHANGE THIS VARIABLE
 LABEL_ALAM = {0: 'Air Terjun', 1: 'Campsite', 2: 'Danau', 3: 'Gunung', 4: 'Hutan', 5: 'Kebun', 6: 'Pantai', 7: 'Sungai'}
@@ -13,6 +15,7 @@ LABEL_BUATAN = {0: 'Bendungan', 1: 'Kebun Binatang', 2: 'Kolam Renang', 3: 'Muse
 PATH_MODEL_BUATAN = "C23-PR589/ML/Model/ResNet50V2_20_A_Batch16_RMS_10-3_Train76_Val80.h5"
 PATH_MODEL_ALAM = "C23-PR589/ML/Model/ResNet50V2_20_N_Batch16_RMS_10-3_Train78_Val72.h5"
 PORT = 8000
+DB_URL = "https://c23-pr589-ru5cfkck3a-uc.a.run.app/"
 # USED FOR API KEY, ENSURE THIS SAME WITH IN ANDROID APP
 SECRET_KEY = "secret"
 # END OF V2
@@ -31,7 +34,6 @@ def checkAPIKey(view):
 
 # Route for Natural Tourism Prediction
 @app.route('/alam', methods=['POST'])
-@checkAPIKey
 def predictAlam():
     # Fetch image from request
     buffer = io.BytesIO()
@@ -50,11 +52,10 @@ def predictAlam():
     else:
         return jsonify({'code': 'A-NF', 'message': 'No prediction found'})
     
-    return jsonify({'status': 'A-OK', 'message': 'Success', 'predictions': predictions, 'city': listCity, 'price': listPrice})
+    return jsonify({'status': 'A-OK', 'message': 'Success', 'predictions': pred_label, 'city': listCity, 'price': listPrice})
 
 # Route for Artificial Tourism Prediction
 @app.route('/buatan', methods=['POST'])
-@checkAPIKey
 def predictBuatan():
     # Fetch image from request
     buffer = io.BytesIO()
@@ -66,6 +67,7 @@ def predictBuatan():
 
     # Predict image
     predictions, pred_label = predict(MODEL_BUATAN, image, LABEL_BUATAN)
+    pred_label = [key for sublist in pred_label for key, value in LABEL_ALL.items() if value in sublist]
 
     # Get recommended places
     if predictions:
@@ -73,42 +75,96 @@ def predictBuatan():
     else:
         return jsonify({'status': 'B-NF', 'message': 'No prediction found'})
     
-    return jsonify({'status': 'A-OK', 'message': 'Success', 'predictions': predictions, 'city': listCity, 'price': listPrice})
+    return jsonify({'status': 'B-OK', 'message': 'Success', 'predictions': predictions, 'city': listCity, 'price': listPrice})
 
 # Route for Filtering
 @app.route('/filter', methods=['POST'])
-@checkAPIKey
 def filterOutput():
-    # priceFilter should be in numerical format, ex: 0=gratis, 1=under 5k, etc.
-    priceFilter = request.form.get('price')
-    # locationFilter should be in string format, ex: "Kota Surabaya", "Kab. Malang", etc.
-    locationFilter = request.form.get('location')
-    # labelFilter should be in string format, ex: "Air Terjun", "Campsite", etc.
-    labelFilter = request.form.get('prediction')
+    priceFilter = request.json['price']
+    locationFilter = request.json['location']
+    labelFilter = request.json['prediction']
 
-    # TODO : Get all available places based on priceFilter, locationFilter, and labelFilter
-    # allPlaces = fetch all places by label from db
-    # filteredPlaces = filter allPlaces by priceFilter and locationFilter
-    # if len(filteredPlaces) == 0:
-    # Do recomendation from one random name in allPlaces
-    recommendations = contentBasedFiltering('Kawah Ijen', locationFilter, DATA_TOURISM, SIMILARITY)
+    upperLimit = 0
+    lowerLimit = 0
+    if priceFilter == 0:
+        lowerLimit = 0
+        upperLimit = 0
+    elif priceFilter == 1:
+        lowerLimit = 1
+        upperLimit = 15000
+    elif priceFilter == 2:
+        lowerLimit = 15001
+        upperLimit = 30000
+    elif priceFilter == 3:
+        lowerLimit = 30001
+        upperLimit = 50000
+    elif priceFilter == 4:
+        lowerLimit = 50001
+        upperLimit = 999999
 
+    # convert dict key in labelFilter to list
+    labelList = [key for sublist in labelFilter for key, value in LABEL_ALL.items() if value in sublist]
+
+    allPlaces = TOURISM_ALL
+    labelFiltered = allPlaces[allPlaces['label'].isin(labelList)]
+    priceFiltered = labelFiltered[(labelFiltered['price'] >= lowerLimit) & (labelFiltered['price'] <= upperLimit)]
+    locationFiltered = priceFiltered[priceFiltered['location']==locationFilter]
+    if locationFiltered.empty:
+        randomPlace = labelFiltered.sample(n=1)
+        recommendations = contentBasedFiltering(randomPlace, locationFilter, DATA_TOURISM, SIMILARITY)
+        if len(recommendations) < 5:
+            minus = 5 - len(recommendations)
+            if minus < len(labelFiltered):
+                listRandomPlace = labelFiltered.sample(n=minus)
+                for i in listRandomPlace.name:
+                    recommendations.append(i)
+    else:
+        recommendations = []
+        for i in locationFiltered.name:
+            recommendations.append(i)
+        if len(recommendations) < 5:
+            minus = 5 - len(recommendations)
+            if minus < len(labelFiltered):
+                listRandomPlace = labelFiltered.sample(n=minus)
+                for i in listRandomPlace.name:
+                    recommendations.append(i)
+
+    allPlaces = None
     return jsonify({'status': 'F-OK', 'message': 'Success', 'recommendations': recommendations})
 
 def getFilterBasedOnLabel(label):
-    print(label)
-    # TODO : Get all distict available places based on prediction label
-    #        Get all price based on prediction label
-    return ['Kota Surabaya', 'Kab. Malang', 'Kab. Sidoarjo', 'Kab. Probolinggo'], [10000, 20000, 30000, 40000]
+    locations = []
+    prices = []
 
-import pandas as pd
+    for i in label:
+        price = req.get(DB_URL + "products/" + str(i)).json()
+        location = req.get(DB_URL + "products/" + str(i) + "/location").json()
+
+        if isinstance(price, dict) and 'msg' in price:
+            for price in price['msg']:
+                if price not in prices:
+                    prices.append(price)
+
+            for location_dict in location:
+                if 'location' in location_dict:
+                    location = location_dict['location']
+                    if location not in locations:
+                        locations.append(location)
+
+    return locations, sorted(prices)
+
 def init():
-    global MODEL_ALAM, MODEL_BUATAN, DATA_TOURISM, SIMILARITY
+    global MODEL_ALAM, MODEL_BUATAN, DATA_TOURISM, SIMILARITY, LABEL_ALL, TOURISM_ALL
     MODEL_ALAM, MODEL_BUATAN = load_model(PATH_MODEL_ALAM, PATH_MODEL_BUATAN)
-    # Data Tourism fetch from db and ensure is in Pandas DataFrame format, 
-    # Column : 'No', 'Wisata', 'Label (int)', 'Label (str)', 'Alamat', 'Harga', 'Image URL', 'Kab/Kota', 'Provinsi', 'Deskripsi'
-    # Used : 'Wisata', 'Label (str)', 'Kab/Kota', 'Provinsi', 'Deskripsi'
-    DATA_TOURISM = pd.read_csv('C23-PR589/ML/Data/dataset.csv')
+    DATA_JSON = req.get(DB_URL + "products").json()
+    TOURISM_ALL = pd.DataFrame(DATA_JSON)
+    DATA_TOURISM = pd.DataFrame(DATA_JSON)
+    DATA_TOURISM = DATA_TOURISM.rename(columns={'name': 'Wisata', 'label': 'Label (int)', 'location': 'Kab/Kota', 'description': 'Deskripsi'})
+    LABEL_ALL = {
+        1 :"Gunung", 2 :"Pantai", 3 :"Danau", 4 :"Museum", 5 :"Campsite", 6 :"Taman", 7 :"Kebun Binatang", 8 :"Kolam Renang",
+        9 :"Air Terjun", 10 :"Sungai", 11 :"Kebun", 12 :"Hutan", 13 :"Peternakan", 14 :"Religi", 15 :"Bendungan", 16 :"Situs Purbakala",
+    }
+    DATA_TOURISM['Label (str)'] = DATA_TOURISM['Label (int)'].map(LABEL_ALL)
     DATA_TOURISM, SIMILARITY = initRecommender(DATA_TOURISM)
 
 if __name__ == '__main__':
