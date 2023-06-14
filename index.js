@@ -7,14 +7,7 @@ import { config } from 'dotenv';
 config();
 
 const app = express();
-const env = process.env.NODE_ENV || 'development';
 const port = process.env.PORT || 8000;
-
-if (env === 'production') {
-    dotenv.config({ path: `.env.${env}` });
-} else {
-    dotenv.config({ path: '.env' });
-}
 
 app.use(cors());
 app.use(morgan('dev'));
