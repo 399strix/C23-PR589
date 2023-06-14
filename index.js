@@ -8,7 +8,7 @@ config();
 
 const app = express();
 const env = process.env.NODE_ENV || 'development';
-const port = 8080;
+const port = process.env.PORT || 8080;
 
 if (env === 'production') {
     dotenv.config({ path: `.env.${env}` });
