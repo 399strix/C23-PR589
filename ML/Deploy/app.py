@@ -5,6 +5,7 @@ from recommender import *
 import io
 import requests as req
 import pandas as pd
+import os
 
 # V1 - DO NOT CHANGE THIS VARIABLE
 LABEL_ALAM = {0: 'Air Terjun', 1: 'Campsite', 2: 'Danau', 3: 'Gunung', 4: 'Hutan', 5: 'Kebun', 6: 'Pantai', 7: 'Sungai'}
@@ -102,7 +103,6 @@ def filterOutput():
         lowerLimit = 50001
         upperLimit = 999999
 
-    # convert dict key in labelFilter to list
     labelList = [key for sublist in labelFilter for key, value in LABEL_ALL.items() if value in sublist]
 
     allPlaces = TOURISM_ALL
