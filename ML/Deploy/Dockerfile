@@ -16,6 +16,9 @@ COPY model.py /app/model.py
 COPY recommender.py /app/recommender.py
 COPY requirements.txt /app/requirements.txt
 
+# Install production dependencies.
+RUN pip install --no-cache-dir -r requirements.txt
+
 # Set environment variables
 ENV PYTHONUNBUFFERED True
 ENV HOST 0.0.0.0
