@@ -19,10 +19,10 @@ COPY requirements.txt /app/requirements.txt
 # Set environment variables
 ENV PYTHONUNBUFFERED True
 ENV HOST 0.0.0.0
-ENV PORT 8000
+ENV PORT 5000
 
 # Expose the specified port
-EXPOSE 8000
+EXPOSE 5000
 
 # Run the application
 CMD exec gunicorn --bind :$PORT --workers 2 --threads 8 --timeout 0 app:app
