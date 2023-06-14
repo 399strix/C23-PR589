@@ -26,4 +26,4 @@ ENV HOST 0.0.0.0
 EXPOSE 8000
 COPY . .
 # start command
-CMD ["npm", "run", "start:prod"]
+CMD ["node", "index.js"]
