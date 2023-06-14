@@ -29,4 +29,4 @@ ENV PORT 8000
 EXPOSE 8000
 
 # Run the application
-CMD ["gunicorn"  , "-b", "0.0.0.0:8000", "app:app"]
+CMD exec gunicorn --bind :$PORT main:app --workers 1 --threads 1
