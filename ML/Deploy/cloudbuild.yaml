@@ -14,7 +14,7 @@ steps:
         "deploy",
         "myimage",
         "--image",
-        "gcr.io/$PROJECT_ID/myimage",
+        "gcr.io/$PROJECT_ID/c23-pr589",
         "--region",
         "us-central1",
         "--platform",
