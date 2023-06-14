@@ -14,7 +14,7 @@ model Product {
   id    Int     @id @default(autoincrement())
   email String  @unique
   name  String?
-  description String?
+  description String @db.VarChar(1500)
   location String
   image String
   label Int 
