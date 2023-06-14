@@ -17,7 +17,7 @@ COPY requirements.txt ./
 RUN pip install --upgrade pip && pip install -r requirements.txt
 
 # Copy the application code
-COPY . .
+COPY ML/ /app/ML/
 
 # Set environment variables
 ENV PYTHONUNBUFFERED True
