@@ -23,4 +23,3 @@ steps:
       ]
 images:
   - "gcr.io/$PROJECT_ID/myimage:$COMMIT_SHA"
-entrypoint: gunicorn -b :$PORT app:app 
