@@ -114,16 +114,25 @@ We have 3 endpoints in our API:
     {
       "message": "Success",
       "recommendations": [
-          "Kebun Bibit Wonorejo",
-          "Kebun Binatang Surabaya",
-          "Taman Bungkul",
           {
-              "id": 15,
-              "name": "Bukit Nirwana"
+            "id": 80,
+            "name": "Kebun Bibit Wonorejo"
           },
           {
-              "id": 7,
-              "name": "Meru Betiri"
+            "id": 82,
+            "name": "Kebun Binatang Surabaya"
+          },
+          {
+            "id": 106,
+            "name": "Taman Bungkul"
+          },
+          {
+            "id": 23,
+            "name": "The Secret Valley"
+          },
+          {
+            "id": 62,
+            "name": "Pemandangan Arak Arak Bondowoso"
           }
       ],
       "status": "F-OK"
