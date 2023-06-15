@@ -2,15 +2,20 @@ package com.capstone.sata.utils
 
 import android.app.Application
 import android.content.ContentResolver
+import android.content.ContentValues
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
+import android.location.Geocoder
 import android.net.Uri
 import android.os.Environment
+import android.util.Log
 import com.capstone.sata.R
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
+import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
 import java.text.SimpleDateFormat
@@ -65,4 +70,34 @@ fun uriToFile(selectedImg: Uri, context: Context): File {
     inputStream.close()
 
     return myFile
+}
+
+fun reduceImageSize(file: File): File {
+    val bitmap = BitmapFactory.decodeFile(file.path)
+    var compressQuality = 100
+    var streamLength: Int
+    do {
+        val bmpStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, compressQuality, bmpStream)
+        val bmpPicByteArray = bmpStream.toByteArray()
+        streamLength = bmpPicByteArray.size
+        compressQuality -= 5
+    } while (streamLength > 1000000)
+    bitmap.compress(Bitmap.CompressFormat.JPEG, compressQuality, FileOutputStream(file))
+    return file
+}
+
+fun getAddressName(context: Context, lat: Double, lon: Double): String {
+    var addressName= "Undefined"
+    val geocoder = Geocoder(context, Locale.getDefault())
+    try {
+        val list = geocoder.getFromLocation(lat, lon, 1)
+        if (list != null && list.size != 0) {
+            addressName = list[0].getAddressLine(0)
+            Log.d(ContentValues.TAG, "getAddressName: $addressName")
+        }
+    } catch (e: IOException) {
+        e.printStackTrace()
+    }
+    return addressName
 }

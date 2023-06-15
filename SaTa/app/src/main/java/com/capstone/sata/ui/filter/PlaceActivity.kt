@@ -5,10 +5,8 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.capstone.sata.R
-import com.capstone.sata.adapter.FragmentAdapter
+import com.capstone.sata.adapter.SataAdapter
 import com.capstone.sata.data.model.Answer
-import com.capstone.sata.data.model.DataFilter
-import com.capstone.sata.data.model.DataPreferences
 import com.capstone.sata.data.preferences.UserPreferences
 import com.capstone.sata.databinding.ActivityPlaceBinding
 import com.capstone.sata.dummy.DataDummy
@@ -32,11 +30,11 @@ class PlaceActivity : AppCompatActivity() {
     private fun showRecyclerView() {
         binding.rvFilter.layoutManager = LinearLayoutManager(this)
         val data = DataDummy.listAnswer()
-        val placeAdapter = FragmentAdapter(data)
+        val placeAdapter = SataAdapter(data)
         binding.rvFilter.setHasFixedSize(true)
         binding.rvFilter.adapter = placeAdapter
 
-        placeAdapter.setOnItemClickCallback(object : FragmentAdapter.OnItemClickCallback {
+        placeAdapter.setOnItemClickCallback(object : SataAdapter.OnItemClickCallback {
             override fun onItemClicked(data: Answer) {
                 Toast.makeText(this@PlaceActivity,userPreferences.getUser().toString(), Toast.LENGTH_LONG).show()
             }

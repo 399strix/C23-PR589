@@ -7,7 +7,7 @@ import com.capstone.sata.data.model.Answer
 import com.capstone.sata.data.preferences.UserPreferences
 import com.capstone.sata.databinding.ItemQuestionBinding
 
-class FragmentAdapter(private val list: List<Answer>) : RecyclerView.Adapter<FragmentAdapter.ViewHolder>() {
+class SataAdapter(private val list: List<Answer>) : RecyclerView.Adapter<SataAdapter.ViewHolder>() {
     private lateinit var onItemClickCallback: OnItemClickCallback
 
     fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {

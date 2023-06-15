@@ -14,6 +14,12 @@
         android:theme="@style/Theme.SaTa"
         tools:targetApi="31">
         <activity
+            android:name=".ui.recom.DetailRecomActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.recom.RecomActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.filter.PlaceActivity"
             android:exported="false" />
         <activity

@@ -4,4 +4,8 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="where_desc">Dimanakah anda ingin berlibur?</string>
+    <string name="recom_desc">Berikut adalah beberapa tempat wisata \nyang kami rekomendasikan berdasarkan\nkriteria dan foto yang anda berikan!</string>
+    <string name="contact">Contact : %s</string>
+    <string name="harga">Harga : %s</string>
+    <string name="btnhome">Cari tempat wisata lainnya?</string>
 </resources>

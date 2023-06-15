@@ -35,3 +35,25 @@ class MainActivity : AppCompatActivity() {
         }
     }
 }
+
+override fun onClick(v: View) {
+    if (v.id == R.id.btn_choose) {
+        if (rgNumber.checkedRadioButtonId > 0) {
+            var value = 0
+            when (rgNumber.checkedRadioButtonId) {
+                R.id.rb_50 -> value = 50
+
+                R.id.rb_100 -> value = 100
+
+                R.id.rb_150 -> value = 150
+
+                R.id.rb_200 -> value = 200
+            }
+
+            val resultIntent = Intent()
+            resultIntent.putExtra(EXTRA_SELECTED_VALUE, value)
+            setResult(RESULT_CODE, resultIntent)
+            finish()
+        }
+    }
+}

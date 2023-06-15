@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="recom_desc">Berikut adalah beberapa tempat wisata \nyang kami rekomendasikan berdasarkan\nkriteria dan foto yang anda berikan!</string>
+    <string name="contact">Contact : %s</string>
+    <string name="harga">Harga : %s</string>
+</resources>
