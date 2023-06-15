@@ -7,14 +7,14 @@ import requests as req
 import pandas as pd
 import os
 
-# V1 - DO NOT CHANGE THIS VARIABLE
+# V1 - DO NOT CHANGE THIS VARIABLE 
 LABEL_ALAM = {0: 'Air Terjun', 1: 'Campsite', 2: 'Danau', 3: 'Gunung', 4: 'Hutan', 5: 'Kebun', 6: 'Pantai', 7: 'Sungai'}
 LABEL_BUATAN = {0: 'Bendungan', 1: 'Kebun Binatang', 2: 'Kolam Renang', 3: 'Museum', 4: 'Peternakan', 5: 'Religi', 6: 'Situs Purbakala', 7: 'Taman'}
 # END OF V1
 
-# V2 - CHANGE THIS INSTEAD
-PATH_MODEL_BUATAN = "h5/buatan.h5"
-PATH_MODEL_ALAM = "h5/alam.h5"
+# V2 - CHANGE THIS INSTEAD C:/Users/Administrator/Desktop/C23-PR589/ML/Deploy/
+PATH_MODEL_BUATAN = "C:/Users/Administrator/Desktop/C23-PR589/ML/Deploy/h5/buatan.h5"
+PATH_MODEL_ALAM = "C:/Users/Administrator/Desktop/C23-PR589/ML/Deploy/h5/alam.h5"
 PORT = 5000
 DB_URL = "https://c23-pr589-ru5cfkck3a-uc.a.run.app/"
 # USED FOR API KEY, ENSURE THIS SAME WITH IN ANDROID APP
@@ -120,8 +120,10 @@ def filterOutput():
                     recommendations.append({"id": wisata_id, "name": name})
     else:
         recommendations = []
-        for i in locationFiltered:
-            recommendations.append([i.id, i.name])
+        for index, row in locationFiltered.iterrows():
+            wisata_id = int(row['id'])
+            name = row['name']
+            recommendations.append({"id": wisata_id, "name": name})
         if len(recommendations) < 5:
             minus = 5 - len(recommendations)
             if minus < len(labelFiltered):
