@@ -28,8 +28,9 @@ def contentBasedFiltering(nama_tempat, filterKota, data_tourism, similarity):
     for i in nama_tempat_list:
             nama = data_tourism.iloc[i[0]].Wisata
             kota = data_tourism.iloc[i[0]]['Kab/Kota']
+            wisata_id = int(data_tourism.iloc[i[0]]['id'])
 
             if filterKota is None or kota == filterKota:
-                recommended_nama_tempats.append(nama)
+                recommended_nama_tempats.append({"id": wisata_id, "name": nama})
         
     return recommended_nama_tempats

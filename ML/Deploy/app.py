@@ -13,8 +13,8 @@ LABEL_BUATAN = {0: 'Bendungan', 1: 'Kebun Binatang', 2: 'Kolam Renang', 3: 'Muse
 # END OF V1
 
 # V2 - CHANGE THIS INSTEAD C:/Users/Administrator/Desktop/C23-PR589/ML/Deploy/
-PATH_MODEL_BUATAN = "h5/buatan.h5"
-PATH_MODEL_ALAM = "h5/alam.h5"
+PATH_MODEL_BUATAN = "C:/Users/Administrator/Desktop/C23-PR589/ML/Deploy/h5/buatan.h5"
+PATH_MODEL_ALAM = "C:/Users/Administrator/Desktop/C23-PR589/ML/Deploy/h5/alam.h5"
 PORT = 5000
 DB_URL = "https://c23-pr589-ru5cfkck3a-uc.a.run.app/"
 # USED FOR API KEY, ENSURE THIS SAME WITH IN ANDROID APP
@@ -46,6 +46,7 @@ def predictAlam():
 
     # Predict image
     predictions, pred_label = predict(MODEL_ALAM, image, LABEL_ALAM)
+    pred_label = [key for sublist in pred_label for key, value in LABEL_ALL.items() if value in sublist]
 
     # Get all available places based on prediction label
     if predictions:
@@ -53,7 +54,7 @@ def predictAlam():
     else:
         return jsonify({'code': 'A-NF', 'message': 'No prediction found'})
     
-    return jsonify({'status': 'A-OK', 'message': 'Success', 'predictions': pred_label, 'city': listCity, 'price': listPrice})
+    return jsonify({'status': 'A-OK', 'message': 'Success', 'predictions_confidence': predictions,'predictions_label': pred_label, 'city': listCity, 'price': listPrice})
 
 # Route for Artificial Tourism Prediction
 @app.route('/buatan', methods=['POST'])
@@ -76,7 +77,7 @@ def predictBuatan():
     else:
         return jsonify({'status': 'B-NF', 'message': 'No prediction found'})
     
-    return jsonify({'status': 'B-OK', 'message': 'Success', 'predictions': pred_label, 'city': listCity, 'price': listPrice})
+    return jsonify({'status': 'B-OK', 'message': 'Success', 'predictions_confidence': predictions,'predictions_label': pred_label, 'city': listCity, 'price': listPrice})
 
 # Route for Filtering
 @app.route('/filter', methods=['POST'])
