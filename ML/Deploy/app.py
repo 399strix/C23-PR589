@@ -13,9 +13,9 @@ LABEL_BUATAN = {0: 'Bendungan', 1: 'Kebun Binatang', 2: 'Kolam Renang', 3: 'Muse
 # END OF V1
 
 # V2 - CHANGE THIS INSTEAD
-PATH_MODEL_BUATAN = "ML/Model/ResNet50V2_20_A_Batch16_RMS_10-3_Train76_Val80.h5"
-PATH_MODEL_ALAM = "ML/Model/ResNet50V2_20_N_Batch16_RMS_10-3_Train78_Val72.h5"
-PORT = 8000
+PATH_MODEL_BUATAN = "/h5/buatan.h5"
+PATH_MODEL_ALAM = "/h5/alam.h5"
+PORT = 5000
 DB_URL = "https://c23-pr589-ru5cfkck3a-uc.a.run.app/"
 # USED FOR API KEY, ENSURE THIS SAME WITH IN ANDROID APP
 SECRET_KEY = "secret"
@@ -76,7 +76,7 @@ def predictBuatan():
     else:
         return jsonify({'status': 'B-NF', 'message': 'No prediction found'})
     
-    return jsonify({'status': 'B-OK', 'message': 'Success', 'predictions': predictions, 'city': listCity, 'price': listPrice})
+    return jsonify({'status': 'B-OK', 'message': 'Success', 'predictions': pred_label, 'city': listCity, 'price': listPrice})
 
 # Route for Filtering
 @app.route('/filter', methods=['POST'])
@@ -103,10 +103,8 @@ def filterOutput():
         lowerLimit = 50001
         upperLimit = 999999
 
-    labelList = [key for sublist in labelFilter for key, value in LABEL_ALL.items() if value in sublist]
-
     allPlaces = TOURISM_ALL
-    labelFiltered = allPlaces[allPlaces['label'].isin(labelList)]
+    labelFiltered = allPlaces[allPlaces['label'].isin(labelFilter)]
     priceFiltered = labelFiltered[(labelFiltered['price'] >= lowerLimit) & (labelFiltered['price'] <= upperLimit)]
     locationFiltered = priceFiltered[priceFiltered['location']==locationFilter]
     if locationFiltered.empty:
@@ -116,19 +114,22 @@ def filterOutput():
             minus = 5 - len(recommendations)
             if minus < len(labelFiltered):
                 listRandomPlace = labelFiltered.sample(n=minus)
-                for i in listRandomPlace.name:
-                    recommendations.append(i)
+                for index, row in listRandomPlace.iterrows():
+                    wisata_id = int(row['id'])
+                    name = row['name']
+                    recommendations.append({"id": wisata_id, "name": name})
     else:
         recommendations = []
-        for i in locationFiltered.name:
-            recommendations.append(i)
+        for i in locationFiltered:
+            recommendations.append([i.id, i.name])
         if len(recommendations) < 5:
             minus = 5 - len(recommendations)
             if minus < len(labelFiltered):
                 listRandomPlace = labelFiltered.sample(n=minus)
-                for i in listRandomPlace.name:
-                    recommendations.append(i)
-
+                for index, row in listRandomPlace.iterrows():
+                    wisata_id = int(row['id'])
+                    name = row['name']
+                    recommendations.append({"id": wisata_id, "name": name})
     allPlaces = None
     return jsonify({'status': 'F-OK', 'message': 'Success', 'recommendations': recommendations})
 
