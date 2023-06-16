@@ -8,7 +8,8 @@ import com.capstone.sata.data.repo.SataRepo
 object Injection {
     fun provideRepository(context: Context): SataRepo{
         val pref = UserPreferences(context)
-        val apiService = ApiConfig.hereAppService
-        return SataRepo(pref, apiService)
+        val apiService = ApiConfig.SataAppService
+        val apiServices = ApiConfig.SataAppServices
+        return SataRepo(pref, apiService, apiServices)
     }
 }

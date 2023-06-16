@@ -4,18 +4,21 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import com.capstone.sata.data.model.FilterResponse
+import com.capstone.sata.data.model.ImageResponse
 import com.capstone.sata.data.model.PostImgResponse
 import com.capstone.sata.data.model.ProductRequest
 import com.capstone.sata.data.model.ProductResponse
 import com.capstone.sata.data.model.Response
 import com.capstone.sata.data.preferences.UserPreferences
 import com.capstone.sata.data.remote.SataAppService
+import com.capstone.sata.data.remote.SataAppServices
 import com.capstone.sata.utils.Result
 import com.google.gson.JsonObject
 import okhttp3.MultipartBody
+import org.json.JSONObject
 
-class SataRepo (private val pref: UserPreferences, private val apiService: SataAppService){
-    fun postImgResponseAlam(file : MultipartBody.Part) : LiveData<Result<PostImgResponse>> = liveData {
+class SataRepo (private val pref: UserPreferences, private val apiService: SataAppService, private val apiServices: SataAppServices){
+    fun postImgResponseAlam(file : MultipartBody.Part) : LiveData<Result<ImageResponse>> = liveData {
         emit(Result.Loading)
         try {
             val response = apiService
@@ -27,7 +30,7 @@ class SataRepo (private val pref: UserPreferences, private val apiService: SataA
         }
     }
 
-    fun postImgResponseBuatan(file : MultipartBody.Part) : LiveData<Result<PostImgResponse>> = liveData {
+    fun postImgResponseBuatan(file : MultipartBody.Part) : LiveData<Result<ImageResponse>> = liveData {
         emit(Result.Loading)
         try {
             val response = apiService
@@ -51,10 +54,10 @@ class SataRepo (private val pref: UserPreferences, private val apiService: SataA
         }
     }
 
-    fun getProductbyId(id: String) : LiveData<Result<ProductResponse>> = liveData {
+    fun getProductbyId(id: Int) : LiveData<Result<ProductResponse>> = liveData {
         emit(Result.Loading)
         try {
-            val response = apiService
+            val response = apiServices
                 .getProductbyId(id)
             emit(Result.Success(response))
         } catch (e: Exception) {

@@ -3,11 +3,10 @@ package com.capstone.sata.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.capstone.sata.data.model.Answer
-import com.capstone.sata.data.preferences.UserPreferences
+import com.capstone.sata.data.model.RecommendationsItem
 import com.capstone.sata.databinding.ItemQuestionBinding
 
-class SataAdapter(private val list: List<String>) : RecyclerView.Adapter<SataAdapter.ViewHolder>() {
+class FilterAdapter (private val list: List<RecommendationsItem>) : RecyclerView.Adapter<FilterAdapter.ViewHolder>() {
     private lateinit var onItemClickCallback: OnItemClickCallback
 
     fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
@@ -15,8 +14,8 @@ class SataAdapter(private val list: List<String>) : RecyclerView.Adapter<SataAda
     }
 
     class ViewHolder(private val item: ItemQuestionBinding) : RecyclerView.ViewHolder(item.root) {
-        fun bind(data: String){
-            item.answer.text = data
+        fun bind(data: RecommendationsItem){
+            item.answer.text = data.name
         }
     }
 
@@ -30,12 +29,12 @@ class SataAdapter(private val list: List<String>) : RecyclerView.Adapter<SataAda
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val data = list[position]
         holder.bind(data)
-       holder.itemView.setOnClickListener {
-           this.onItemClickCallback.onItemClicked(data, position)
-       }
+        holder.itemView.setOnClickListener {
+            this.onItemClickCallback.onItemClicked(data)
+        }
     }
 
     interface OnItemClickCallback {
-        fun onItemClicked(data: String, position: Int)
+        fun onItemClicked(data: RecommendationsItem)
     }
 }

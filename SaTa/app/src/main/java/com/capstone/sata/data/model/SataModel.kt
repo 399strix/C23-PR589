@@ -1,6 +1,8 @@
 package com.capstone.sata.data.model
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
 
 data class DataFilter(
     val imgUrl : String,
@@ -26,6 +28,38 @@ data class DataPreferences(
 data class Response(
     var msg : String
 )
+
+@Parcelize
+data class ImageResponse(
+
+    @field:SerializedName("predictions_confidence")
+    val predictionsConfidence: PredictionsConfidence,
+
+    @field:SerializedName("city")
+    val city: List<String>,
+
+    @field:SerializedName("price")
+    val price: List<String>,
+
+    @field:SerializedName("predictions_label")
+    val predictionsLabel: List<Int>,
+
+    @field:SerializedName("message")
+    val message: String,
+
+    @field:SerializedName("status")
+    val status: String
+) : Parcelable
+
+@Parcelize
+data class PredictionsConfidence(
+
+    @field:SerializedName("Taman")
+    val taman: Double,
+
+    @field:SerializedName("Peternakan")
+    val peternakan: Double
+):Parcelable
 
 data class PostImgResponse(
 
@@ -66,14 +100,22 @@ data class ProductResponse(
     var price : Int
 )
 
+data class RecommendationsItem(
+
+    @field:SerializedName("name")
+    val name: String,
+
+    @field:SerializedName("id")
+    val id: Int
+)
 data class FilterResponse(
 
     @field:SerializedName("message")
-    val message: String? = null,
+    val message: String,
 
     @field:SerializedName("recommendations")
-    val recommendations: List<String?>? = null,
+    val recommendations: List<RecommendationsItem>,
 
     @field:SerializedName("status")
-    val status: String?=null
+    val status: String
 )

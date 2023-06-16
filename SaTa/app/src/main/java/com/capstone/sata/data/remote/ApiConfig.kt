@@ -21,5 +21,13 @@ object ApiConfig {
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
-    val hereAppService = retrofit.create<SataAppService>()
+    val SataAppService = retrofit.create<SataAppService>()
+
+    private val newretrofit = Retrofit.Builder()
+        .client(okHttp)
+        .baseUrl("https://c23-pr589-ru5cfkck3a-uc.a.run.app/")
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+
+    val SataAppServices = newretrofit.create<SataAppServices>()
 }

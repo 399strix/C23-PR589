@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.cam.CameraActivity">
+    tools:context=".ui.cam.CameraActivity"
+    android:background="@color/khaki">
 
     <ImageView
         android:id="@+id/iv_insert"
@@ -14,7 +15,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="70dp"
 
         android:src="@drawable/ic_insertimage"
         />
@@ -24,7 +25,7 @@
         android:layout_width="256dp"
         android:layout_height="wrap_content"
 
-        android:text="Masukkan foto yang menjadi tempat acuan liburan anda! "
+        android:text="Masukkan foto yang menjadi tempat acuan anda berwisata! "
 
         android:textAlignment="center"
         android:textSize="18sp"
@@ -33,12 +34,13 @@
         app:layout_constraintEnd_toEndOf="@+id/iv_insert"
         app:layout_constraintStart_toStartOf="@+id/iv_insert"
         app:layout_constraintTop_toBottomOf="@+id/iv_insert"
-        android:layout_marginTop="18dp"/>
+        android:layout_marginTop="8dp"/>
 
     <Button
         android:id="@+id/btn_next"
         android:layout_width="256dp"
         android:layout_height="wrap_content"
+        android:backgroundTint="#146551"
 
         android:text="Lanjut"
 
