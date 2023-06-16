@@ -1,6 +1,7 @@
 # **C23-PR589 - Machine Learning**
 
 ## **Table of Contents**
+
 - [Introduction](#introduction)
 - [Data](#data)
 - [Model](#model)
